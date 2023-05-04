@@ -22,8 +22,9 @@ function Modal({ modalData }) {
                 <li className="pt-1">Director : {modalData.Director}</li>
                 <li className="pt-1">Actors : {modalData.Actors}</li>
                 <li className="pt-1">Country : {modalData.Country}</li>
-                <li className="pt-1">Rating : {modalData.imdbRating}</li>
-                <li className="pt-3 text-center">{modalData.Plot}</li>
+                <li className="pt-1 pb-2">Rating : {modalData.imdbRating}</li>
+                <hr />
+                <li className="pt-2 text-center">{modalData.Plot}</li>
               </ul>
             </div>
           </div>

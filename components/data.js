@@ -1,20 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Children } from "react";
 import axios from "axios";
 import Modal from "./modal";
+import Navbar from "./navbar";
+import Pagination from "./pagination";
+import Filter from "./filter";
+import Footer from "./footer";
 
 function Data() {
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState("Game of Thrones");
   const [modalData, setModalData] = useState({ Title: "MovieDB" });
+  const [page, setPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
+  const [type, setType] = useState("");
+
+  if (page > maxPage) {
+    setPage(maxPage);
+  } else if (page < 1) {
+    setPage(1);
+  }
 
   function clickHandler() {
     const input = document.getElementById("input").value;
     setKeyword(input);
+    setPage(1);
   }
 
   useEffect(() => {
     request();
-  }, [keyword]);
+  }, [keyword, page, type]);
 
   function request() {
     let config = {
@@ -25,6 +39,8 @@ function Data() {
       params: {
         apikey: "8b0ec394",
         s: keyword,
+        page: page,
+        type: type,
       },
     };
 
@@ -33,6 +49,7 @@ function Data() {
       .then(response => {
         if (response.data.Response == "True") {
           setData(response.data.Search); // Menyimpan data dalam bentuk array
+          setMaxPage(Math.ceil(response.data.totalResults / 10));
         } else {
           setData([{ imdbID: "error", Title: response.data.Error }]);
         }
@@ -51,6 +68,7 @@ function Data() {
       params: {
         apikey: "8b0ec394",
         i: imdbID,
+        plot: "full",
       },
     };
 
@@ -70,13 +88,14 @@ function Data() {
 
   return (
     <>
-      <div className=""></div>
-      <div className="btn-group">
-        <button className="btn">«</button>
-        <button className="btn">Page 22</button>
-        <button className="btn">»</button>
+      <Navbar clickHandler={clickHandler} />
+      <div className="flex flex-wrap justify-center mx-12 pt-12 pb-4">
+        <div className="flex-initial sm:w-1/4 hidden sm:block"></div>
+        <Pagination page={page} maxPage={maxPage} setPage={setPage} />
+        <Filter setType={setType} />
       </div>
-      <div className="flex flex-wrap mx-12 py-12 justify-evenly">
+
+      <div className="flex flex-wrap justify-evenly">
         {data.map(item => {
           if (item.imdbID === "error") {
             return (
@@ -110,6 +129,11 @@ function Data() {
           );
         })}
       </div>
+
+      <div className="flex flex-wrap justify-center mx-12 pt-12 pb-4">
+        <Pagination page={page} maxPage={maxPage} setPage={setPage} />
+      </div>
+      <Footer />
       <Modal modalData={modalData} />
     </>
   );

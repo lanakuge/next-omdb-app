@@ -1,9 +1,9 @@
-const Navbar = () => {
+const Navbar = ({ clickHandler }) => {
   return (
     <>
       <div className="navbar bg-neutral-800 flex flex-wrap md:flex-row flex-col items-center justify-center md:justify-between px-4 py-3 text-neutral-300">
         <div className="flex items-center">
-          <a className="btn btn-ghost normal-case text-xl">
+          <a className="btn btn-ghost normal-case text-xl hover:bg-neutral-900">
             Movie<span className="text-white">DB</span>
           </a>
         </div>
