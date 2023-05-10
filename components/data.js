@@ -64,7 +64,6 @@ function Data() {
       method: "get",
       maxBodyLength: Infinity,
       url: "https://www.omdbapi.com/",
-      headers: {},
       params: {
         apikey: "8b0ec394",
         i: imdbID,
